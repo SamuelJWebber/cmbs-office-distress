@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMBS Office Distress Monitor</title>
+<meta name="description" content="Loan-level CMBS distress dashboard built from SEC Form ABS-EE asset data: appraisal haircuts, 2026-2028 maturity wall, DSCR/occupancy/special-servicing buckets by metro and property type.">
+<style>
+:root{--ink:#14202e;--muted:#5b6b7c;--line:#dde3ea;--bg:#f7f8fa;--card:#fff;--navy:#1f3a5f;--rust:#b5452b}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--navy);color:#fff;padding:28px 0 22px}.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+h1{margin:0 0 4px;font-size:28px;letter-spacing:-.01em}header p{margin:0;color:#c9d6e3}
+.badge{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:999px;background:#fff3d6;color:#6b4a00;font-weight:600;font-size:13px;border:1px solid #f0d48a}
+section{margin:26px 0}h2{font-size:19px;margin:0 0 10px}h3{font-size:15px;margin:0 0 6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}.kpi .v{font-size:24px;font-weight:700}
+.kpi .l{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}.kpi .s{color:var(--muted);font-size:12.5px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}.card p.cap{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+svg{width:100%;height:auto;display:block}svg .axis{font-size:11px;fill:#5b6b7c}svg .val{font-size:11px;fill:#14202e;font-weight:600}
+svg .grid{stroke:#e8ecf1}svg .zero{stroke:#8795a5;stroke-dasharray:3 3}
+.legend{font-size:12px;color:var(--muted)}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:middle}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+.heat th,.heat td{border:1px solid var(--line);padding:8px 10px;text-align:center;font-size:13px}.heat thead th{background:#eef2f6}
+.heat tbody th{text-align:left;background:#fafbfc}.heat td b{display:block;font-size:15px}.heat td span{font-size:11.5px;color:#55606c}
+.heat td.dark{color:#fff}.heat td.dark span{color:#fbe3dc}.heat td.empty{color:#b8c2cc}.heat td.tot{background:#eef2f6}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.filters select,.filters input{font:inherit;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:#fff}
+.filters .count{color:var(--muted);font-size:13px;margin-left:auto}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+#loans th,#loans td{padding:7px 10px;border-bottom:1px solid var(--line);font-size:13px;white-space:nowrap}
+#loans th{background:#eef2f6;text-align:left;cursor:pointer;user-select:none;position:sticky;top:0}#loans th:hover{background:#e2e8ef}
+#loans td.n{text-align:right;font-variant-numeric:tabular-nums}#loans tr:hover td{background:#f8fafc}
+.flag{display:inline-block;padding:1px 7px;margin-right:3px;border-radius:999px;font-size:11px;font-weight:600;background:#fbe3dc;color:#8a2f1a}
+.flag.wall{background:#e3ebf5;color:#1f3a5f}.bad{color:var(--rust);font-weight:600}
+.method{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}.method ul{margin:6px 0;padding-left:18px}
+.ev th,.ev td{border:1px solid var(--line);padding:7px 10px;font-size:13px;text-align:left;vertical-align:top}.ev th{background:#eef2f6}
+.notes{font-size:13px;color:var(--muted)}footer{color:var(--muted);font-size:12.5px;padding:24px 0 40px;border-top:1px solid var(--line);margin-top:30px}
+code{background:#eef2f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>CMBS Office Distress Monitor</h1>
+<p>Loan-level SEC Form ABS-EE (CMBS) asset data → appraisal haircuts, the 2026–2028 maturity wall, and distress by metro × property type. Reporting period end: <b>2026-10-15</b>.</p>
+<span class="badge" id="evidence-badge">Fixture-proven v0.1 prototype — configure CMBS_CONTACT in Actions for live SEC ABS-EE ingestion</span>
+</div></header>
+<main class="wrap">
+<section><div class="kpis"><div class="kpi"><div class="l">Current balance</div><div class="v">$640.0M</div><div class="s">16 loans · office 62.2%</div></div><div class="kpi"><div class="l">2026–2028 maturity wall</div><div class="v">69.4%</div><div class="s">$444.0M across 11 loans</div></div><div class="kpi"><div class="l">Office appraisal haircut</div><div class="v">36.2%</div><div class="s">pool 22.9% · 2 loans lack an appraisal pair</div></div><div class="kpi"><div class="l">Special servicing</div><div class="v">43.0%</div><div class="s">$275.0M · 6 loans</div></div><div class="kpi"><div class="l">DSCR &lt; 1.00x</div><div class="v">43.9%</div><div class="s">6 loans · office wtd DSCR 0.98x</div></div><div class="kpi"><div class="l">Realized losses</div><div class="v">$15.7M</div><div class="s">office $14.5M</div></div></div></section>
+
+<section class="grid3">
+<div class="card"><h3>Maturity wall, 2026–2028</h3><svg viewBox="0 0 420 230" role="img" aria-label="Maturity wall by year, office versus other"><line x1="56" x2="410" y1="196.0" y2="196.0" class="grid"/><text x="50" y="200.0" text-anchor="end" class="axis">$0</text><line x1="56" x2="410" y1="107.0" y2="107.0" class="grid"/><text x="50" y="111.0" text-anchor="end" class="axis">$92.5M</text><line x1="56" x2="410" y1="18.0" y2="18.0" class="grid"/><text x="50" y="22.0" text-anchor="end" class="axis">$185.0M</text><rect x="81.2" y="39.2" width="64.2" height="17.3" fill="#9fb3c8"><title>2026 other: $18.0M</title></rect><rect x="81.2" y="56.5" width="64.2" height="139.5" fill="#1f3a5f"><title>2026 office: $145.0M</title></rect><text x="113.3" y="34.2" text-anchor="middle" class="val">$163.0M</text><text x="113.3" y="218" text-anchor="middle" class="axis">2026</text><rect x="195.9" y="18.0" width="64.2" height="21.2" fill="#9fb3c8"><title>2027 other: $22.0M</title></rect><rect x="195.9" y="39.2" width="64.2" height="156.8" fill="#1f3a5f"><title>2027 office: $163.0M</title></rect><text x="228.0" y="13.0" text-anchor="middle" class="val">$185.0M</text><text x="228.0" y="218" text-anchor="middle" class="axis">2027</text><rect x="310.6" y="103.6" width="64.2" height="55.8" fill="#9fb3c8"><title>2028 other: $58.0M</title></rect><rect x="310.6" y="159.4" width="64.2" height="36.6" fill="#1f3a5f"><title>2028 office: $38.0M</title></rect><text x="342.7" y="98.6" text-anchor="middle" class="val">$96.0M</text><text x="342.7" y="218" text-anchor="middle" class="axis">2028</text></svg>
+<div class="legend"><span class="sw" style="background:#1f3a5f"></span>Office<span class="sw" style="background:#9fb3c8"></span>Other property types</div>
+<p class="cap">Current balance by calendar year of <code>maturityDate</code>. 69.4% of the pool; office is 86.9% of office balance.</p></div>
+<div class="card"><h3>Distress buckets (share of balance)</h3><svg viewBox="0 0 420 200" role="img" aria-label="Distress buckets, share of balance"><text x="122" y="28" text-anchor="end" class="axis">DSCR &lt; 1.00x</text><rect x="130" y="14" width="101.0" height="13" fill="#9fb3c8"><title>All loans · DSCR &lt; 1.00x: 43.9% of balance (6 loans, $281.0M)</title></rect><text x="236.0" y="25" class="val">43.9%</text><rect x="130" y="30" width="146.2" height="13" fill="#1f3a5f"><title>Office · DSCR &lt; 1.00x: 63.6% of balance (5 loans, $253.0M)</title></rect><text x="281.2" y="41" class="val">63.6%</text><text x="122" y="74" text-anchor="end" class="axis">Occupancy &lt; 75%</text><rect x="130" y="60" width="112.5" height="13" fill="#9fb3c8"><title>All loans · Occupancy &lt; 75%: 48.9% of balance (7 loans, $313.0M)</title></rect><text x="247.5" y="71" class="val">48.9%</text><rect x="130" y="76" width="168.2" height="13" fill="#1f3a5f"><title>Office · Occupancy &lt; 75%: 73.1% of balance (6 loans, $291.0M)</title></rect><text x="303.2" y="87" class="val">73.1%</text><text x="122" y="120" text-anchor="end" class="axis">Special servicing</text><rect x="130" y="106" width="98.8" height="13" fill="#9fb3c8"><title>All loans · Special servicing: 43.0% of balance (6 loans, $275.0M)</title></rect><text x="233.8" y="117" class="val">43.0%</text><rect x="130" y="122" width="146.2" height="13" fill="#1f3a5f"><title>Office · Special servicing: 63.6% of balance (5 loans, $253.0M)</title></rect><text x="281.2" y="133" class="val">63.6%</text><text x="122" y="166" text-anchor="end" class="axis">Any distress flag</text><rect x="130" y="152" width="122.5" height="13" fill="#9fb3c8"><title>All loans · Any distress flag: 53.3% of balance (8 loans, $341.0M)</title></rect><text x="257.5" y="163" class="val">53.3%</text><rect x="130" y="168" width="168.2" height="13" fill="#1f3a5f"><title>Office · Any distress flag: 73.1% of balance (6 loans, $291.0M)</title></rect><text x="303.2" y="179" class="val">73.1%</text></svg>
+<div class="legend"><span class="sw" style="background:#9fb3c8"></span>All loans<span class="sw" style="background:#1f3a5f"></span>Office only</div>
+<p class="cap">Strict thresholds; loans that do not report a metric are not counted as distressed on it.</p></div>
+<div class="card"><h3>Appraisal haircut by property type</h3><svg viewBox="0 0 420 136" role="img" aria-label="Appraisal haircut by property type"><line x1="258.0" x2="258.0" y1="8" y2="130" class="zero"/><text x="88" y="26" text-anchor="end" class="axis">Office</text><rect x="258.0" y="14" width="114.0" height="16" fill="#b5452b"><title>Office: 36.2% value change vs securitisation</title></rect><text x="377.0" y="27" text-anchor="start" class="val">36.2%</text><text x="88" y="56" text-anchor="end" class="axis">Retail</text><rect x="258.0" y="44" width="63.0" height="16" fill="#b5452b"><title>Retail: 20.0% value change vs securitisation</title></rect><text x="326.0" y="57" text-anchor="start" class="val">20.0%</text><text x="88" y="86" text-anchor="end" class="axis">Multifamily</text><rect x="244.8" y="74" width="13.2" height="16" fill="#2f7d5b"><title>Multifamily: -4.2% value change vs securitisation</title></rect><text x="239.8" y="87" text-anchor="end" class="val">-4.2%</text><text x="88" y="116" text-anchor="end" class="axis">Industrial</text><rect x="218.0" y="104" width="40.0" height="16" fill="#2f7d5b"><title>Industrial: -12.7% value change vs securitisation</title></rect><text x="213.0" y="117" text-anchor="end" class="val">-12.7%</text></svg>
+<p class="cap">1 − Σ most-recent valuation / Σ securitisation valuation, over loans reporting both. Green = value up.</p></div>
+</section>
+
+<section><h2>Metro × property type: distressed share of balance</h2>
+<p class="notes">Cell = share of current balance carrying any distress flag (bold), then balance · loan count. Hover for maturity-wall share and haircut.</p>
+<table class="heat"><thead><tr><th>Metro</th><th>Office</th><th>Industrial</th><th>Multifamily</th><th>Retail</th><th>Metro total</th></tr></thead><tbody><tr><th>Boston</th><td style="background:rgb(216,157,139)" class="" title="Boston Office: 2 loans, $100.0M; distressed 48.0%; wall 48.0%; haircut 16.9%"><b>48%</b><span>$100.0M · 2</span></td><td class="empty">·</td><td class="empty">·</td><td style="background:rgb(250,240,228)" class="" title="Boston Retail: 1 loan, $18.0M; distressed 0.0%; wall 100.0%; haircut —"><b>0%</b><span>$18.0M · 1</span></td><td class="tot"><b>41%</b><span>$118.0M</span></td></tr><tr><th>Chicago</th><td style="background:rgb(181,69,43)" class="dark" title="Chicago Office: 1 loan, $60.0M; distressed 100.0%; wall 100.0%; haircut 42.0%"><b>100%</b><span>$60.0M · 1</span></td><td style="background:rgb(250,240,228)" class="" title="Chicago Industrial: 1 loan, $40.0M; distressed 0.0%; wall 0.0%; haircut -15.0%"><b>0%</b><span>$40.0M · 1</span></td><td class="empty">·</td><td style="background:rgb(181,69,43)" class="dark" title="Chicago Retail: 1 loan, $22.0M; distressed 100.0%; wall 100.0%; haircut 20.0%"><b>100%</b><span>$22.0M · 1</span></td><td class="tot"><b>67%</b><span>$122.0M</span></td></tr><tr><th>Dallas</th><td style="background:rgb(181,69,43)" class="dark" title="Dallas Office: 1 loan, $38.0M; distressed 100.0%; wall 100.0%; haircut 20.0%"><b>100%</b><span>$38.0M · 1</span></td><td style="background:rgb(250,240,228)" class="" title="Dallas Industrial: 1 loan, $34.0M; distressed 0.0%; wall 0.0%; haircut -10.0%"><b>0%</b><span>$34.0M · 1</span></td><td style="background:rgb(250,240,228)" class="" title="Dallas Multifamily: 1 loan, $30.0M; distressed 0.0%; wall 100.0%; haircut 5.0%"><b>0%</b><span>$30.0M · 1</span></td><td class="empty">·</td><td class="tot"><b>37%</b><span>$102.0M</span></td></tr><tr><th>New York</th><td style="background:rgb(209,138,118)" class="dark" title="New York Office: 2 loans, $135.0M; distressed 59.3%; wall 100.0%; haircut 40.0%"><b>59%</b><span>$135.0M · 2</span></td><td class="empty">·</td><td style="background:rgb(250,240,228)" class="" title="New York Multifamily: 1 loan, $45.0M; distressed 0.0%; wall 0.0%; haircut -10.0%"><b>0%</b><span>$45.0M · 1</span></td><td class="empty">·</td><td class="tot"><b>44%</b><span>$180.0M</span></td></tr><tr><th>San Francisco</th><td style="background:rgb(181,69,43)" class="dark" title="San Francisco Office: 2 loans, $65.0M; distressed 100.0%; wall 100.0%; haircut 55.3%"><b>100%</b><span>$65.0M · 2</span></td><td class="empty">·</td><td class="empty">·</td><td style="background:rgb(181,69,43)" class="dark" title="San Francisco Retail: 1 loan, $28.0M; distressed 100.0%; wall 100.0%; haircut 20.0%"><b>100%</b><span>$28.0M · 1</span></td><td class="tot"><b>100%</b><span>$93.0M</span></td></tr><tr><th>Other</th><td class="empty">·</td><td class="empty">·</td><td style="background:rgb(250,240,228)" class="" title="Other Multifamily: 1 loan, $25.0M; distressed 0.0%; wall 0.0%; haircut -5.0%"><b>0%</b><span>$25.0M · 1</span></td><td class="empty">·</td><td class="tot"><b>0%</b><span>$25.0M</span></td></tr></tbody></table></section>
+
+<section><h2>Loan tape</h2><div class="filters"><select id="f-metro" aria-label="Metro"><option value="">All metros</option></select><select id="f-type" aria-label="Property type"><option value="">All property types</option></select><select id="f-flag" aria-label="Flag"><option value="">All loans</option><option value="any">Any distress flag</option><option value="dscr_lt_1">DSCR &lt; 1.00x</option><option value="occ_lt_75">Occupancy &lt; 75%</option><option value="special_servicing">Special servicing</option><option value="wall">2026–2028 maturity</option></select><input id="f-q" type="search" placeholder="Search asset, property, city" aria-label="Search"><span class="count" id="count"></span></div>
+<div class="tablewrap"><table id="loans"><thead><tr><th data-key="asset">Asset</th><th data-key="name">Property</th><th data-key="metro">Metro</th><th data-key="city">City</th><th data-key="type">Type</th><th data-key="balance" data-num="1">Balance</th><th data-key="dscr" data-num="1">DSCR</th><th data-key="occ" data-num="1">Occupancy</th><th data-key="haircut" data-num="1">Haircut</th><th data-key="maturity">Maturity</th><th data-key="ss">SS transfer</th><th data-key="loss" data-num="1">Realized loss</th><th data-key="flags" data-num="1">Flags</th></tr></thead><tbody></tbody></table></div>
+<noscript><p class="notes">The loan table needs JavaScript; every aggregate above is static.</p></noscript>
+</section>
+
+<section class="method"><div class="card"><h2>Methodology</h2><ul>
+<li><b>Haircut</b> = 1 − <code>mostRecentValuationAmount</code> / <code>valuationSecuritizationAmount</code>. Pool and group haircuts are value-weighted.</li>
+<li><b>Maturity wall</b> = balance with <code>maturityDate</code> in 2026–2028 (inclusive), over total current balance (<code>currentEndingScheduledBalanceAmount</code>).</li>
+<li><b>Distress</b>: DSCR (<code>mostRecentDebtServiceCoverageNetOperatingIncomePercentage</code>) &lt; 1.00x; occupancy (<code>mostRecentPhysicalOccupancyPercentage</code>) &lt; 75%; special servicing = a special-servicer transfer date is reported.</li>
+<li><b>Weighted DSCR / occupancy</b> are balance-weighted over loans that report the metric and carry a positive balance.</li>
+<li><b>Metro</b> is assigned from <code>propertyCity</code> + <code>propertyState</code> via a fixed lookup; unmatched cities fall into “Other”.</li>
+</ul></div>
+<div class="card"><h2>Evidence</h2><table class="ev"><thead><tr><th>Claim</th><th>Level</th></tr></thead><tbody>
+<tr><td>Parser, analytics and this page reproduce the synthetic fixture exactly</td><td>fixture-proven</td></tr>
+<tr><td>XML labels match live EX-102 filings</td><td>unverified</td></tr>
+<tr><td>Numbers on this page describe any real trust</td><td>no — the input is synthetic</td></tr>
+<tr><td>Live ingestion from SEC EDGAR</td><td>unverified (needs <code>CMBS_CONTACT</code>)</td></tr>
+</tbody></table>
+<h3 style="margin-top:12px">Parse notes</h3><ul class="notes"><li>LN-009: occupancy reported on a 0-100 scale, rescaled to a fraction</li><li>LN-009: 2 property blocks; first property&#x27;s fields used</li></ul></div>
+</section>
+</main>
+<footer><div class="wrap">Source: <code>synthetic_cmbs_absee.xml</code> · cmbs-office-distress v0.1.0 · Not investment advice. Synthetic fixture data does not describe any real loan, property or trust.</div></footer>
+<script type="application/json" id="loan-data">[{"asset":"LN-001","balance":80000000.0,"city":"New York, NY","dscr":0.85,"flags":["dscr_lt_1","occ_lt_75","special_servicing"],"haircut":0.4,"loss":null,"maturity":"2026-09-01","metro":"New York","name":"Midtown West Tower","occ":0.64,"ss":"2025-11-12","type":"Office","wall":true},{"asset":"LN-002","balance":55000000.0,"city":"New York, NY","dscr":1.0,"flags":[],"haircut":null,"loss":null,"maturity":"2027-06-01","metro":"New York","name":"Sixth Avenue Exchange","occ":0.75,"ss":null,"type":"Office","wall":true},{"asset":"LN-003","balance":45000000.0,"city":"Brooklyn, NY","dscr":1.62,"flags":[],"haircut":-0.1,"loss":null,"maturity":"2030-03-01","metro":"New York","name":"Brooklyn Heights Residences","occ":0.96,"ss":null,"type":"Multifamily","wall":false},{"asset":"LN-004","balance":65000000.0,"city":"San Francisco, CA","dscr":0.72,"flags":["dscr_lt_1","occ_lt_75","special_servicing"],"haircut":0.55,"loss":null,"maturity":"2026-11-01","metro":"San Francisco","name":"Market Street Center","occ":0.52,"ss":"2025-04-18","type":"Office","wall":true},{"asset":"LN-005","balance":0.0,"city":"San Francisco, CA","dscr":0.4,"flags":["dscr_lt_1","occ_lt_75","special_servicing"],"haircut":0.56,"loss":14500000.0,"maturity":"2026-04-01","metro":"San Francisco","name":"SoMa Tech Annex","occ":0.35,"ss":"2024-08-05","type":"Office","wall":true},{"asset":"LN-006","balance":28000000.0,"city":"San Francisco, CA","dscr":0.95,"flags":["dscr_lt_1"],"haircut":0.2,"loss":null,"maturity":"2028-02-01","metro":"San Francisco","name":"Bayview Promenade","occ":0.78,"ss":null,"type":"Retail","wall":true},{"asset":"LN-007","balance":60000000.0,"city":"Chicago, IL","dscr":0.88,"flags":["dscr_lt_1","occ_lt_75","special_servicing"],"haircut":0.42,"loss":null,"maturity":"2027-08-01","metro":"Chicago","name":"South Wacker Plaza","occ":0.61,"ss":"2025-07-22","type":"Office","wall":true},{"asset":"LN-008","balance":22000000.0,"city":"Chicago, IL","dscr":1.05,"flags":["occ_lt_75","special_servicing"],"haircut":0.2,"loss":1200000.0,"maturity":"2027-03-01","metro":"Chicago","name":"Lakefront Gallery","occ":0.7,"ss":"2026-02-10","type":"Retail","wall":true},{"asset":"LN-009","balance":40000000.0,"city":"Chicago, IL","dscr":1.95,"flags":[],"haircut":-0.15,"loss":null,"maturity":"2031-05-01","metro":"Chicago","name":"O'Hare Logistics Park","occ":0.97,"ss":null,"type":"Industrial","wall":false},{"asset":"LN-010","balance":38000000.0,"city":"Dallas, TX","dscr":1.18,"flags":["occ_lt_75"],"haircut":0.2,"loss":null,"maturity":"2028-09-01","metro":"Dallas","name":"Uptown Crescent","occ":0.72,"ss":null,"type":"Office","wall":true},{"asset":"LN-011","balance":34000000.0,"city":"Irving, TX","dscr":1.85,"flags":[],"haircut":-0.1,"loss":null,"maturity":"2029-11-01","metro":"Dallas","name":"DFW Freight Hub","occ":0.94,"ss":null,"type":"Industrial","wall":false},{"asset":"LN-012","balance":30000000.0,"city":"Dallas, TX","dscr":1.32,"flags":[],"haircut":0.05,"loss":null,"maturity":"2028-05-01","metro":"Dallas","name":"Oak Lawn Terrace","occ":0.91,"ss":null,"type":"Multifamily","wall":true},{"asset":"LN-013","balance":48000000.0,"city":"Boston, MA","dscr":0.92,"flags":["dscr_lt_1","occ_lt_75","special_servicing"],"haircut":0.3,"loss":null,"maturity":"2027-10-01","metro":"Boston","name":"Back Bay Commerce","occ":0.73,"ss":"2026-01-15","type":"Office","wall":true},{"asset":"LN-014","balance":52000000.0,"city":"Cambridge, MA","dscr":1.48,"flags":[],"haircut":0.05,"loss":null,"maturity":"2030-07-01","metro":"Boston","name":"Kendall Lab Campus","occ":0.89,"ss":null,"type":"Office","wall":false},{"asset":"LN-015","balance":18000000.0,"city":"Boston, MA","dscr":null,"flags":[],"haircut":null,"loss":null,"maturity":"2026-12-01","metro":"Boston","name":"Newbury Street Block","occ":0.84,"ss":null,"type":"Retail","wall":true},{"asset":"LN-016","balance":25000000.0,"city":"Denver, CO","dscr":1.4,"flags":[],"haircut":-0.05,"loss":null,"maturity":"2029-04-01","metro":"Other","name":"RiNo Flats","occ":0.93,"ss":null,"type":"Multifamily","wall":false}]</script>
+<script>
+(function(){
+const rows=JSON.parse(document.getElementById('loan-data').textContent);
+const tb=document.querySelector('#loans tbody');
+const fMetro=document.getElementById('f-metro'),fType=document.getElementById('f-type'),fFlag=document.getElementById('f-flag'),fQ=document.getElementById('f-q'),cnt=document.getElementById('count');
+const FL={dscr_lt_1:'DSCR<1',occ_lt_75:'Occ<75',special_servicing:'SS'};
+let sortKey='balance',sortDir=-1;
+function uniq(k){return [...new Set(rows.map(r=>r[k]))].sort();}
+function opt(sel,vals){vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});}
+opt(fMetro,uniq('metro'));opt(fType,uniq('type'));
+function money(v){if(v===null)return '\u2014';if(Math.abs(v)>=1e9)return '$'+(v/1e9).toFixed(2)+'B';if(Math.abs(v)>=1e6)return '$'+(v/1e6).toFixed(1)+'M';return '$'+Math.round(v).toLocaleString('en-US');}
+function pct(v){return v===null?'\u2014':(v*100).toFixed(1)+'%';}
+function x(v){return v===null?'\u2014':v.toFixed(2)+'x';}
+function td(text,cls){const c=document.createElement('td');c.textContent=text;if(cls)c.className=cls;return c;}
+function keep(r){
+ if(fMetro.value&&r.metro!==fMetro.value)return false;
+ if(fType.value&&r.type!==fType.value)return false;
+ const f=fFlag.value;
+ if(f==='any'&&!r.flags.length)return false;
+ if(f==='wall'&&!r.wall)return false;
+ if(f&&f!=='any'&&f!=='wall'&&!r.flags.includes(f))return false;
+ const q=fQ.value.trim().toLowerCase();
+ if(q&&!(r.asset+' '+r.name+' '+r.city).toLowerCase().includes(q))return false;
+ return true;}
+function cmp(a,b){const va=a[sortKey],vb=b[sortKey];if(va===vb)return 0;if(va===null)return 1;if(vb===null)return -1;
+ if(Array.isArray(va))return (va.length-vb.length)*sortDir;return (va<vb?-1:1)*sortDir;}
+function draw(){
+ const shown=rows.filter(keep).sort(cmp);tb.textContent='';let bal=0;
+ shown.forEach(r=>{bal+=r.balance||0;const tr=document.createElement('tr');
+  tr.appendChild(td(r.asset));tr.appendChild(td(r.name));tr.appendChild(td(r.metro));tr.appendChild(td(r.city));tr.appendChild(td(r.type));
+  tr.appendChild(td(money(r.balance),'n'));
+  tr.appendChild(td(x(r.dscr),'n'+(r.dscr!==null&&r.dscr<1?' bad':'')));
+  tr.appendChild(td(pct(r.occ),'n'+(r.occ!==null&&r.occ<0.75?' bad':'')));
+  tr.appendChild(td(pct(r.haircut),'n'+(r.haircut!==null&&r.haircut>=0.3?' bad':'')));
+  tr.appendChild(td(r.maturity||'\u2014'));tr.appendChild(td(r.ss||'\u2014'));
+  tr.appendChild(td(r.loss?money(r.loss):'\u2014','n'));
+  const fc=document.createElement('td');
+  r.flags.forEach(f=>{const s=document.createElement('span');s.className='flag';s.textContent=FL[f];fc.appendChild(s);});
+  if(r.wall){const s=document.createElement('span');s.className='flag wall';s.textContent='Wall';fc.appendChild(s);}
+  tr.appendChild(fc);tb.appendChild(tr);});
+ cnt.textContent=shown.length+' of '+rows.length+' loans \u00b7 '+money(bal)+' balance';}
+document.querySelectorAll('#loans th').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.key;
+ if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=(th.dataset.num?-1:1);}draw();}));
+[fMetro,fType,fFlag].forEach(e=>e.addEventListener('change',draw));fQ.addEventListener('input',draw);
+draw();})();
+</script>
+</body>
+</html>

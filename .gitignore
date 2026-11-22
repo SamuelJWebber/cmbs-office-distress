@@ -1,0 +1,28 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local downloaded SEC filings (never commit raw third-party dumps)
+data/raw/
+*.local.xml
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SYNTHETIC SEC Form ABS-EE (CMBS) test fixture.
+  All loans, properties, valuations and loss figures are fictional and exist solely
+  to verify parser, analytics and dashboard rendering logic (evidence level: fixture-proven).
+-->
+<assetData xmlns="http://www.sec.gov/edgar/document/absee/cmbs/assetdata">
+  <assets>
+    <assetNumber>LN-001</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2026-09-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>80000000</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>2025-11-12</specialServicerTransferDate>
+    <property>
+      <propertyName>Midtown West Tower</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>New York</propertyCity>
+      <propertyState>NY</propertyState>
+      <valuationSecuritizationAmount>140000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>84000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.85</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.64</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-002</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2027-06-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>55000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Sixth Avenue Exchange</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>New York</propertyCity>
+      <propertyState>NY</propertyState>
+      <valuationSecuritizationAmount>95000000</valuationSecuritizationAmount>
+      <!-- Intentionally omitted mostRecentValuationAmount (missing appraisal edge case) -->
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.00</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.75</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-003</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2030-03-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>45000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Brooklyn Heights Residences</propertyName>
+      <propertyTypeCode>MF</propertyTypeCode>
+      <propertyCity>Brooklyn</propertyCity>
+      <propertyState>NY</propertyState>
+      <valuationSecuritizationAmount>70000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>77000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.62</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.96</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-004</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2026-11-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>65000000</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>04-18-2025</specialServicerTransferDate>
+    <property>
+      <propertyName>Market Street Center</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>San Francisco</propertyCity>
+      <propertyState>CA</propertyState>
+      <valuationSecuritizationAmount>120000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>54000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.72</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.52</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-005</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2026-04-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>0</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>2024-08-05</specialServicerTransferDate>
+    <realizedLossToTrustAmount>14500000</realizedLossToTrustAmount>
+    <property>
+      <propertyName>SoMa Tech Annex</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>San Francisco</propertyCity>
+      <propertyState>CA</propertyState>
+      <valuationSecuritizationAmount>50000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>22000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.40</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.35</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-006</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2028-02-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>28000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Bayview Promenade</propertyName>
+      <propertyTypeCode>RT</propertyTypeCode>
+      <propertyCity>San Francisco</propertyCity>
+      <propertyState>CA</propertyState>
+      <valuationSecuritizationAmount>45000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>36000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.95</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.78</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-007</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2027-08-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>60000000</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>2025-07-22</specialServicerTransferDate>
+    <property>
+      <propertyName>South Wacker Plaza</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>Chicago</propertyCity>
+      <propertyState>IL</propertyState>
+      <valuationSecuritizationAmount>100000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>58000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.88</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.61</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-008</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2027-03-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>22000000</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>2026-02-10</specialServicerTransferDate>
+    <realizedLossToTrustAmount>1200000</realizedLossToTrustAmount>
+    <property>
+      <propertyName>Lakefront Gallery</propertyName>
+      <propertyTypeCode>RT</propertyTypeCode>
+      <propertyCity>Chicago</propertyCity>
+      <propertyState>IL</propertyState>
+      <valuationSecuritizationAmount>35000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>28000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.05</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.70</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-009</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2031-05-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>40000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>O'Hare Logistics Park</propertyName>
+      <propertyTypeCode>IN</propertyTypeCode>
+      <propertyCity>Chicago</propertyCity>
+      <propertyState>IL</propertyState>
+      <valuationSecuritizationAmount>62000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>71300000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.95</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <!-- Intentionally reported on 0-100 scale to exercise occupancy rescaling -->
+      <mostRecentPhysicalOccupancyPercentage>97.0</mostRecentPhysicalOccupancyPercentage>
+    </property>
+    <property>
+      <propertyName>O'Hare Logistics Park Phase II</propertyName>
+      <propertyTypeCode>IN</propertyTypeCode>
+      <propertyCity>Evanston</propertyCity>
+      <propertyState>IL</propertyState>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-010</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2028-09-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>38000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Uptown Crescent</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>Dallas</propertyCity>
+      <propertyState>TX</propertyState>
+      <valuationSecuritizationAmount>64000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>51200000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.18</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.72</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-011</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2029-11-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>34000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>DFW Freight Hub</propertyName>
+      <propertyTypeCode>IN</propertyTypeCode>
+      <propertyCity>Irving</propertyCity>
+      <propertyState>TX</propertyState>
+      <valuationSecuritizationAmount>52000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>57200000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.85</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.94</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-012</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2028-05-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>30000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Oak Lawn Terrace</propertyName>
+      <propertyTypeCode>MF</propertyTypeCode>
+      <propertyCity>Dallas</propertyCity>
+      <propertyState>TX</propertyState>
+      <valuationSecuritizationAmount>48000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>45600000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.32</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.91</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-013</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2027-10-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>48000000</currentEndingScheduledBalanceAmount>
+    <specialServicerTransferDate>2026-01-15</specialServicerTransferDate>
+    <property>
+      <propertyName>Back Bay Commerce</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>Boston</propertyCity>
+      <propertyState>MA</propertyState>
+      <valuationSecuritizationAmount>82000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>57400000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>0.92</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.73</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-014</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2030-07-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>52000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Kendall Lab Campus</propertyName>
+      <propertyTypeCode>OF</propertyTypeCode>
+      <propertyCity>Cambridge</propertyCity>
+      <propertyState>MA</propertyState>
+      <valuationSecuritizationAmount>90000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>85500000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.48</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.89</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-015</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2026-12-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>18000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>Newbury Street Block</propertyName>
+      <propertyTypeCode>RT</propertyTypeCode>
+      <propertyCity>Boston</propertyCity>
+      <propertyState>MA</propertyState>
+      <valuationSecuritizationAmount>30000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount></mostRecentValuationAmount>
+      <!-- Missing DSCR edge case -->
+      <mostRecentPhysicalOccupancyPercentage>0.84</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+
+  <assets>
+    <assetNumber>LN-016</assetNumber>
+    <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <maturityDate>2029-04-01</maturityDate>
+    <currentEndingScheduledBalanceAmount>25000000</currentEndingScheduledBalanceAmount>
+    <property>
+      <propertyName>RiNo Flats</propertyName>
+      <propertyTypeCode>MF</propertyTypeCode>
+      <propertyCity>Denver</propertyCity>
+      <propertyState>CO</propertyState>
+      <valuationSecuritizationAmount>40000000</valuationSecuritizationAmount>
+      <mostRecentValuationAmount>42000000</mostRecentValuationAmount>
+      <mostRecentDebtServiceCoverageNetOperatingIncomePercentage>1.40</mostRecentDebtServiceCoverageNetOperatingIncomePercentage>
+      <mostRecentPhysicalOccupancyPercentage>0.93</mostRecentPhysicalOccupancyPercentage>
+    </property>
+  </assets>
+</assetData>
