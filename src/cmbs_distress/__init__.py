@@ -7,7 +7,8 @@ Evidence vocabulary used throughout this repo (see CLAUDE.md):
 * seen live        - observed on the deployed GitHub Pages site / a live Actions run
 * unverified       - written from the spec or from memory, not yet checked against anything
 
-At v0.1 everything in this package is fixture-proven at most. Nothing is "seen on the data".
+At v0.2 everything in this package (including longitudinal multi-filing migration analytics)
+is fixture-proven at most. Nothing is "seen on the data" yet.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

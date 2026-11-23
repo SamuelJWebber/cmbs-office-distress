@@ -49,10 +49,47 @@ FIELD_LABELS: dict[str, tuple[str, ...]] = {
         "reportPeriodEndScheduledLoanBalanceAmount",  # unverified alternate
     ),
     "realized_loss": ("realizedLossToTrustAmount",),
+    "origination_date": (
+        "originationDate",
+        "loanOriginationDate",  # unverified alternate
+    ),
+    "payment_status_code": (
+        "paymentStatusLoanCode",
+        "loanPaymentStatusCode",  # unverified alternate
+    ),
 }
 
 ASSET_ELEMENT = "assets"
 PROPERTY_ELEMENT = "property"
+
+# SEC Form ABS-EE / CREFC paymentStatusLoanCode -> display label
+PAYMENT_STATUS_LABELS: dict[str, str] = {
+    "0": "Current",
+    "A": "Not Yet Due",
+    "B": "Late (<30d)",
+    "1": "30-59d Delinquent",
+    "2": "60-89d Delinquent",
+    "3": "90+d Delinquent",
+    "4": "Performing Matured Balloon",
+    "5": "Non-Performing Matured Balloon",
+    "6": "121+d Delinquent",
+}
+
+# Codes indicating 30+ days delinquent or non-performing matured balloon
+DELINQUENT_PAYMENT_CODES: frozenset[str] = frozenset({"1", "2", "3", "5", "6"})
+
+# Monotonic severity ordering for delinquency roll analysis
+PAYMENT_STATUS_SEVERITY: dict[str, int] = {
+    "A": 0,
+    "0": 0,
+    "B": 1,
+    "4": 1,
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "5": 5,
+    "6": 6,
+}
 
 # ABS-EE CMBS property type codes -> display label
 PROPERTY_TYPES: dict[str, str] = {
@@ -103,6 +140,8 @@ class Loan:
     realized_loss: float | None
     reporting_period_end: dt.date | None
     property_count: int = 1
+    origination_date: dt.date | None = None
+    payment_status_code: str | None = None
 
     @property
     def in_special_servicing(self) -> bool:
@@ -111,6 +150,26 @@ class Loan:
     @property
     def is_office(self) -> bool:
         return self.property_type_code == "OF"
+
+    @property
+    def is_delinquent(self) -> bool:
+        return self.payment_status_code in DELINQUENT_PAYMENT_CODES
+
+    @property
+    def payment_status(self) -> str:
+        if self.payment_status_code is None:
+            return "Unknown"
+        return PAYMENT_STATUS_LABELS.get(
+            self.payment_status_code, f"Code {self.payment_status_code}"
+        )
+
+    @property
+    def vintage_year(self) -> int | None:
+        return self.origination_date.year if self.origination_date else None
+
+    @property
+    def maturity_year(self) -> int | None:
+        return self.maturity_date.year if self.maturity_date else None
 
 
 @dataclass
@@ -216,6 +275,10 @@ def parse_asset(asset: ET.Element, index: int, notes: list[str]) -> Loan:
         notes.append(f"{asset_number}: {props} property blocks; first property's fields used")
     city = _pick(found, "property_city")
     state = _pick(found, "property_state")
+    pay_code = _pick(found, "payment_status_code")
+    pay_code = pay_code.strip().upper() if pay_code else None
+    if pay_code and pay_code not in PAYMENT_STATUS_LABELS:
+        notes.append(f"{asset_number}: unknown paymentStatusLoanCode {pay_code!r}")
     return Loan(
         asset_number=asset_number,
         property_name=_pick(found, "property_name"),
@@ -234,6 +297,8 @@ def parse_asset(asset: ET.Element, index: int, notes: list[str]) -> Loan:
         realized_loss=parse_number(_pick(found, "realized_loss")),
         reporting_period_end=parse_date(_pick(found, "reporting_period_end")),
         property_count=max(props, 1),
+        origination_date=parse_date(_pick(found, "origination_date")),
+        payment_status_code=pay_code,
     )
 
 

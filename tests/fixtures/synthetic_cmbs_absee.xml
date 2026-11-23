@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  SYNTHETIC SEC Form ABS-EE (CMBS) test fixture.
-  All loans, properties, valuations and loss figures are fictional and exist solely
+  SYNTHETIC SEC Form ABS-EE (CMBS) test fixture (Period 1 baseline, reportingPeriodEndDate = 2026-10-15).
+  All loans, properties, valuations, payment statuses and loss figures are fictional and exist solely
   to verify parser, analytics and dashboard rendering logic (evidence level: fixture-proven).
 -->
 <assetData xmlns="http://www.sec.gov/edgar/document/absee/cmbs/assetdata">
   <assets>
     <assetNumber>LN-001</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2016-08-15</originationDate>
     <maturityDate>2026-09-01</maturityDate>
     <currentEndingScheduledBalanceAmount>80000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>5</paymentStatusLoanCode>
     <specialServicerTransferDate>2025-11-12</specialServicerTransferDate>
     <property>
       <propertyName>Midtown West Tower</propertyName>
@@ -26,8 +28,10 @@
   <assets>
     <assetNumber>LN-002</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2017-05-15</originationDate>
     <maturityDate>2027-06-01</maturityDate>
     <currentEndingScheduledBalanceAmount>55000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Sixth Avenue Exchange</propertyName>
       <propertyTypeCode>OF</propertyTypeCode>
@@ -43,8 +47,10 @@
   <assets>
     <assetNumber>LN-003</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2020-02-20</originationDate>
     <maturityDate>2030-03-01</maturityDate>
     <currentEndingScheduledBalanceAmount>45000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Brooklyn Heights Residences</propertyName>
       <propertyTypeCode>MF</propertyTypeCode>
@@ -60,8 +66,10 @@
   <assets>
     <assetNumber>LN-004</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2016-10-10</originationDate>
     <maturityDate>2026-11-01</maturityDate>
     <currentEndingScheduledBalanceAmount>65000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>3</paymentStatusLoanCode>
     <specialServicerTransferDate>04-18-2025</specialServicerTransferDate>
     <property>
       <propertyName>Market Street Center</propertyName>
@@ -78,8 +86,10 @@
   <assets>
     <assetNumber>LN-005</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2016-03-15</originationDate>
     <maturityDate>2026-04-01</maturityDate>
     <currentEndingScheduledBalanceAmount>0</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>3</paymentStatusLoanCode>
     <specialServicerTransferDate>2024-08-05</specialServicerTransferDate>
     <realizedLossToTrustAmount>14500000</realizedLossToTrustAmount>
     <property>
@@ -97,8 +107,10 @@
   <assets>
     <assetNumber>LN-006</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2018-01-25</originationDate>
     <maturityDate>2028-02-01</maturityDate>
     <currentEndingScheduledBalanceAmount>28000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Bayview Promenade</propertyName>
       <propertyTypeCode>RT</propertyTypeCode>
@@ -114,8 +126,10 @@
   <assets>
     <assetNumber>LN-007</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2017-07-18</originationDate>
     <maturityDate>2027-08-01</maturityDate>
     <currentEndingScheduledBalanceAmount>60000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>2</paymentStatusLoanCode>
     <specialServicerTransferDate>2025-07-22</specialServicerTransferDate>
     <property>
       <propertyName>South Wacker Plaza</propertyName>
@@ -132,8 +146,10 @@
   <assets>
     <assetNumber>LN-008</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2017-02-14</originationDate>
     <maturityDate>2027-03-01</maturityDate>
     <currentEndingScheduledBalanceAmount>22000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>3</paymentStatusLoanCode>
     <specialServicerTransferDate>2026-02-10</specialServicerTransferDate>
     <realizedLossToTrustAmount>1200000</realizedLossToTrustAmount>
     <property>
@@ -151,8 +167,10 @@
   <assets>
     <assetNumber>LN-009</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2021-04-20</originationDate>
     <maturityDate>2031-05-01</maturityDate>
     <currentEndingScheduledBalanceAmount>40000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>O'Hare Logistics Park</propertyName>
       <propertyTypeCode>IN</propertyTypeCode>
@@ -175,8 +193,10 @@
   <assets>
     <assetNumber>LN-010</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2021-08-15</originationDate>
     <maturityDate>2028-09-01</maturityDate>
     <currentEndingScheduledBalanceAmount>38000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Uptown Crescent</propertyName>
       <propertyTypeCode>OF</propertyTypeCode>
@@ -192,8 +212,10 @@
   <assets>
     <assetNumber>LN-011</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2019-10-22</originationDate>
     <maturityDate>2029-11-01</maturityDate>
     <currentEndingScheduledBalanceAmount>34000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>DFW Freight Hub</propertyName>
       <propertyTypeCode>IN</propertyTypeCode>
@@ -209,8 +231,10 @@
   <assets>
     <assetNumber>LN-012</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2018-04-18</originationDate>
     <maturityDate>2028-05-01</maturityDate>
     <currentEndingScheduledBalanceAmount>30000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Oak Lawn Terrace</propertyName>
       <propertyTypeCode>MF</propertyTypeCode>
@@ -226,8 +250,10 @@
   <assets>
     <assetNumber>LN-013</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2017-09-25</originationDate>
     <maturityDate>2027-10-01</maturityDate>
     <currentEndingScheduledBalanceAmount>48000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>1</paymentStatusLoanCode>
     <specialServicerTransferDate>2026-01-15</specialServicerTransferDate>
     <property>
       <propertyName>Back Bay Commerce</propertyName>
@@ -244,8 +270,10 @@
   <assets>
     <assetNumber>LN-014</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2020-06-15</originationDate>
     <maturityDate>2030-07-01</maturityDate>
     <currentEndingScheduledBalanceAmount>52000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Kendall Lab Campus</propertyName>
       <propertyTypeCode>OF</propertyTypeCode>
@@ -261,8 +289,10 @@
   <assets>
     <assetNumber>LN-015</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2021-11-15</originationDate>
     <maturityDate>2026-12-01</maturityDate>
     <currentEndingScheduledBalanceAmount>18000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>Newbury Street Block</propertyName>
       <propertyTypeCode>RT</propertyTypeCode>
@@ -278,8 +308,10 @@
   <assets>
     <assetNumber>LN-016</assetNumber>
     <reportingPeriodEndDate>2026-10-15</reportingPeriodEndDate>
+    <originationDate>2019-03-20</originationDate>
     <maturityDate>2029-04-01</maturityDate>
     <currentEndingScheduledBalanceAmount>25000000</currentEndingScheduledBalanceAmount>
+    <paymentStatusLoanCode>0</paymentStatusLoanCode>
     <property>
       <propertyName>RiNo Flats</propertyName>
       <propertyTypeCode>MF</propertyTypeCode>

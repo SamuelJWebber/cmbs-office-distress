@@ -1,50 +1,61 @@
 # cmbs-office-distress
 
-Loan-level SEC Form ABS-EE (CMBS) XML parser, distress analytics, and self-contained static GitHub Pages dashboard tracking appraisal-reduction haircuts, the 2026–2028 maturity wall, and distress buckets (DSCR < 1.00x, occupancy < 75%, special servicing) across metros and property types.
+Loan-level SEC Form ABS-EE (CMBS) XML parser, longitudinal multi-filing distress analytics, and self-contained static GitHub Pages dashboard tracking appraisal-reduction haircuts, monthly credit migration, appraisal velocity, the 2026–2028 maturity wall, and distress buckets (DSCR < 1.00x, occupancy < 75%, special servicing, 30+d delinquency) across metros, property types, origination vintages, and maturity cohorts.
 
-> **Status (v0.1):** **Fixture-proven v0.1 prototype** — all metrics currently rendered in [`docs/index.html`](docs/index.html) come from a synthetic 16-loan SEC ABS-EE CMBS XML fixture (`tests/fixtures/synthetic_cmbs_absee.xml`). Configure the `CMBS_CONTACT` repository secret in GitHub Actions to enable live SEC EDGAR ABS-EE ingestion.
+> **Status (v0.2):** **Fixture-proven v0.2 longitudinal prototype** — all metrics currently rendered in [`docs/index.html`](docs/index.html) come from two dated synthetic 16-loan SEC ABS-EE CMBS XML fixtures (`tests/fixtures/synthetic_cmbs_absee.xml` dated `2026-10-15` and `tests/fixtures/synthetic_cmbs_absee_2026_10.xml` dated `2026-11-15`). Configure the `CMBS_CONTACT` repository secret in GitHub Actions to enable live SEC EDGAR ABS-EE ingestion.
 
 ## Evidence Discipline
 
 Every claim in this repository uses a strict four-tier evidence vocabulary:
 
-| Tier | Meaning | Current v0.1 scope |
+| Tier | Meaning | Current v0.2 scope |
 | --- | --- | --- |
-| **fixture-proven** | Verified by automated pytest assertions against synthetic XML fixtures | XML parser, analytics math, static HTML/SVG dashboard, User-Agent validation |
+| **fixture-proven** | Verified by automated pytest assertions against synthetic XML fixtures | XML parser, snapshot analytics, longitudinal multi-filing migration & velocity engine, static HTML/SVG dashboard, CLI, User-Agent validation |
 | **seen on the data** | Observed in a real downloaded SEC Form ABS-EE EX-102 XML filing | None yet |
 | **seen live** | Observed on deployed GitHub Pages or a live Actions ingestion run | None yet |
-| **unverified** | Written from SEC ABS-EE schema specification, not yet checked against live filings | Live EX-102 tag variations, alternate label fallbacks, live EDGAR fetch helpers |
+| **unverified** | Written from SEC ABS-EE schema specification, not yet checked against live filings | Live EX-102 tag variations (including `paymentStatusLoanCode` and `originationDate`), alternate label fallbacks, live EDGAR fetch helpers |
 
 ## What Is Built
 
 - **Pure Python 3.12 standard library at runtime** (`pyproject.toml`, zero heavy third-party runtime dependencies; `pytest` only for tests).
 - **`src/cmbs_distress/parser.py`** — Label-based, namespace-agnostic SEC Form ABS-EE CMBS XML parser extracting:
-  - `assetNumber`, `propertyName`, `propertyTypeCode`, `propertyCity`, `propertyState`
+  - `assetNumber`, `reportingPeriodEndDate`, `originationDate`, `maturityDate`
+  - `propertyName`, `propertyTypeCode`, `propertyCity`, `propertyState`
   - `valuationSecuritizationAmount`, `mostRecentValuationAmount`
   - `mostRecentDebtServiceCoverageNetOperatingIncomePercentage`, `mostRecentPhysicalOccupancyPercentage`
-  - `specialServicerTransferDate`, `maturityDate`, `currentEndingScheduledBalanceAmount`, `realizedLossToTrustAmount`
+  - `specialServicerTransferDate`, `paymentStatusLoanCode`, `currentEndingScheduledBalanceAmount`, `realizedLossToTrustAmount`
   - Rejects `DOCTYPE`/`ENTITY` declarations, preserves missing values as `None`, normalizes 0–100 occupancy scales with explicit parse notes, and tracks multi-property loans.
-- **`src/cmbs_distress/analytics.py`** — Computes:
+- **`src/cmbs_distress/analytics.py`** — Single-period pool analytics:
   - Value-weighted appraisal haircut (`1 - sum(recent) / sum(securitization)` over loans reporting both valuations)
   - 2026–2028 maturity-wall balance, share, and office vs. other breakdown by calendar year
   - Distress buckets (`DSCR < 1.00x`, `Occupancy < 75%`, `Special servicing`, and `Any distress flag`) with strict boundary semantics and reporting coverage counts
   - Metro × Property-Type rollups reconciling 100% of loan count, balance, and realized loss
-- **`src/cmbs_distress/render.py`** — Generates a deterministic, self-contained static dashboard at `docs/index.html` (embedded CSS, 3 inline SVG charts, Metro × Property-Type heatmap, and client-side filterable/sortable loan table with zero external scripts or fonts).
+- **`src/cmbs_distress/longitudinal.py`** — Multi-filing longitudinal surveillance engine matching loans by `asset_number` across 2+ dated loan tapes:
+  - **Special-servicing inflows & outflows**: newly transferred loans ($ and count, office breakdown), returns to master servicing, and resolutions out of special servicing
+  - **Appraisal-haircut velocity**: matched-pair month-over-month valuation change ($ and %) and value-weighted haircut widening across pool, office, metro, property type, and individual movers (tracking newly appraised loans separately without distorting matched velocity)
+  - **DSCR & occupancy migration matrix**: strict-threshold transitions across `Healthy` (DSCR >= 1.25x & Occ >= 85%) -> `Watch` (1.00x–1.25x or 75%–85%) -> `Distressed` (DSCR < 1.00x or Occ < 75%) plus `Resolved / Liq`, computed for combined credit tier and standalone DSCR/occupancy alongside explicit `< 1.00x` / `< 75%` threshold crossings
+  - **Delinquency transitions**: newly 30+d delinquent loans, cures, severity rolls, and resolutions derived strictly from reported `paymentStatusLoanCode` values
+  - **Incremental realized losses & liquidations**: month-over-month realized-loss deltas (never double-counting previously liquidated loans), liquidation loss severity, full payoffs without loss, and active modification losses
+  - **Vintage & maturity-year cohort exposure tables**: reconciling pool share, office share, distress, special-servicing inflows, haircuts, MoM valuation velocity, and incremental losses across maturity years and origination vintages
+- **`src/cmbs_distress/render.py`** — Generates a deterministic, self-contained static dashboard at `docs/index.html` (embedded CSS, 5 inline SVG charts including MoM appraisal valuation waterfall and multi-period distress trajectory, credit migration matrix, transition log, maturity/vintage cohort tables, Metro × Property-Type heatmap, and client-side filterable/sortable loan table with zero external scripts or fonts).
 - **`src/cmbs_distress/ingest.py`** — Actions-ready SEC EDGAR fetcher enforcing a compliant `"<name> <contact-email>"` User-Agent from `CMBS_CONTACT` (no URLs or parentheses) and polite request pacing. Never invoked by tests.
 
 ## Quickstart
 
 ```bash
 python -m pip install -e ".[test]"
-pytest -v
+python -m pytest -v
 
-# Inspect synthetic fixture summary
+# Inspect two-period synthetic fixture summary (defaults to both v0.2 fixtures)
 python -m cmbs_distress inspect
+
+# Compare dated loan tapes directly (add --json for machine-readable output)
+python -m cmbs_distress compare
 
 # Regenerate docs/index.html cleanly
 python -m cmbs_distress build
 
-# Verify docs/index.html is in sync with the fixture
+# Verify docs/index.html is in sync with the fixtures
 python -m cmbs_distress build --check
 ```
 
@@ -60,7 +71,10 @@ SEC EDGAR fair-access guidelines require every automated request to declare a co
    ```bash
    CMBS_CONTACT="cmbs-office-distress maintainer@example.com" python -m cmbs_distress check-contact
    ```
-3. Download live EX-102 XML filings using `cmbs_distress.ingest` and pass them to `python -m cmbs_distress build -i path/to/ex102.xml -o docs/index.html`.
+3. Download two or more monthly EX-102 XML filings using `cmbs_distress.ingest` and pass them to:
+   ```bash
+   python -m cmbs_distress build -i path/to/month1.xml path/to/month2.xml -o docs/index.html
+   ```
 
 ## Repository Layout
 
@@ -71,13 +85,17 @@ SEC EDGAR fair-access guidelines require every automated request to declare a co
 │   ├── __main__.py
 │   ├── parser.py
 │   ├── analytics.py
+│   ├── longitudinal.py
 │   ├── render.py
 │   ├── ingest.py
 │   └── cli.py
 ├── tests/
-│   ├── fixtures/synthetic_cmbs_absee.xml
+│   ├── fixtures/
+│   │   ├── synthetic_cmbs_absee.xml
+│   │   └── synthetic_cmbs_absee_2026_10.xml
 │   ├── test_parser.py
 │   ├── test_analytics.py
+│   ├── test_longitudinal.py
 │   ├── test_render.py
 │   ├── test_ingest.py
 │   ├── test_cli.py
@@ -90,4 +108,4 @@ SEC EDGAR fair-access guidelines require every automated request to declare a co
 
 ## Disclaimer
 
-This repository is an engineering prototype for public-filing analytics and is not investment advice. The v0.1 synthetic fixture does not represent any real commercial mortgage loan, borrower, property, or securitization trust.
+This repository is an engineering prototype for public-filing analytics and is not investment advice. The v0.2 synthetic fixtures do not represent any real commercial mortgage loan, borrower, property, or securitization trust.

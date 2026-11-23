@@ -52,6 +52,12 @@ def test_parse_fixture_all_fields_and_edge_cases():
     assert ln1.special_servicer_transfer_date == dt.date(2025, 11, 12)
     assert ln1.in_special_servicing is True
     assert ln1.maturity_date == dt.date(2026, 9, 1)
+    assert ln1.origination_date == dt.date(2016, 8, 15)
+    assert ln1.vintage_year == 2016
+    assert ln1.maturity_year == 2026
+    assert ln1.payment_status_code == "5"
+    assert ln1.payment_status == "Non-Performing Matured Balloon"
+    assert ln1.is_delinquent is True
     assert ln1.current_balance == 80_000_000.0
     assert ln1.realized_loss is None
 
@@ -60,6 +66,9 @@ def test_parse_fixture_all_fields_and_edge_cases():
     assert ln2.valuation_securitization == 95_000_000.0
     assert ln2.most_recent_valuation is None
     assert ln2.in_special_servicing is False
+    assert ln2.payment_status_code == "0"
+    assert ln2.payment_status == "Current"
+    assert ln2.is_delinquent is False
 
     # MM-DD-YYYY date format for specialServicerTransferDate
     ln4 = by_id["LN-004"]
@@ -121,6 +130,8 @@ def test_alternate_labels_and_unknown_property_code():
         <propertyTypeCode>ZZ</propertyTypeCode>
         <propertyCity>Austin</propertyCity>
         <propertyState>tx</propertyState>
+        <loanOriginationDate>2019-06-01</loanOriginationDate>
+        <loanPaymentStatusCode>9</loanPaymentStatusCode>
         <mostRecentSpecialServicerTransferDate>20260105</mostRecentSpecialServicerTransferDate>
         <reportPeriodEndScheduledLoanBalanceAmount>$12,500,000</reportPeriodEndScheduledLoanBalanceAmount>
       </assets>
@@ -133,9 +144,15 @@ def test_alternate_labels_and_unknown_property_code():
     assert loan.property_type == "Other"
     assert loan.property_state == "TX"
     assert loan.metro == "Other"
+    assert loan.origination_date == dt.date(2019, 6, 1)
+    assert loan.vintage_year == 2019
+    assert loan.payment_status_code == "9"
+    assert loan.payment_status == "Code 9"
+    assert loan.is_delinquent is False
     assert loan.special_servicer_transfer_date == dt.date(2026, 1, 5)
     assert loan.current_balance == 12_500_000.0
     assert any("unknown propertyTypeCode 'ZZ'" in n for n in res.notes)
+    assert any("unknown paymentStatusLoanCode '9'" in n for n in res.notes)
 
 
 def test_rejects_doctype_and_entity():

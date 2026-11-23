@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cmbs-office-distress"
-version = "0.1.0"
-description = "Label-based SEC Form ABS-EE (CMBS) loan-tape parser, distress analytics and a static GitHub Pages dashboard."
+version = "0.2.0"
+description = "Label-based SEC Form ABS-EE (CMBS) loan-tape parser, longitudinal distress analytics, and static GitHub Pages dashboard."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
