@@ -2,7 +2,7 @@
 
 Loan-level SEC Form ABS-EE (CMBS) XML parser, longitudinal multi-filing distress analytics, and self-contained static GitHub Pages dashboard tracking appraisal-reduction haircuts, monthly credit migration, appraisal velocity, the 2026–2028 maturity wall, and distress buckets (DSCR < 1.00x, occupancy < 75%, special servicing, 30+d delinquency) across metros, property types, origination vintages, and maturity cohorts.
 
-> **Status (v0.2):** **Fixture-proven v0.2 longitudinal prototype** — all metrics currently rendered in [`docs/index.html`](docs/index.html) come from two dated synthetic 16-loan SEC ABS-EE CMBS XML fixtures (`tests/fixtures/synthetic_cmbs_absee.xml` dated `2026-10-15` and `tests/fixtures/synthetic_cmbs_absee_2026_10.xml` dated `2026-11-15`). Configure the `CMBS_CONTACT` repository secret in GitHub Actions to enable live SEC EDGAR ABS-EE ingestion.
+> **Status (v0.2):** **Fixture-proven v0.2 longitudinal prototype** — all metrics currently rendered in [`docs/index.html`](docs/index.html) come from two dated synthetic 16-loan SEC ABS-EE CMBS XML fixtures (`tests/fixtures/synthetic_cmbs_absee.xml` dated `2026-10-15` and `tests/fixtures/synthetic_cmbs_absee_2026_10.xml` dated `2026-11-15`). The CI workflow validates a configured contact and rebuilds the fixture dashboard. Live filing retrieval is a separate manual operation.
 
 ## Evidence Discipline
 
@@ -58,6 +58,18 @@ python -m cmbs_distress build
 # Verify docs/index.html is in sync with the fixtures
 python -m cmbs_distress build --check
 ```
+
+## Reproduce the fixture dashboard
+
+The two source tapes and the expected dashboard are committed. These commands check their SHA-256 digests, rerun the period comparison and verify that a fresh render exactly matches the saved HTML.
+
+```bash
+sha256sum -c checks/fixture-dashboard.sha256
+python -m cmbs_distress compare
+python -m cmbs_distress build --check
+```
+
+At revision `ca00cde11475d64fb37b5af04934fbccf1fec340`, 16 synthetic loans span October 15 and November 15. Two loans enter special servicing ($93.0 million). Matched appraisals change by −$29.4 million. These are fixture-proven outputs. No underlying market loan tape has been archived in this revision.
 
 ## Configuring Live SEC EDGAR Ingestion
 

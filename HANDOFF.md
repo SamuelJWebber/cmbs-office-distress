@@ -4,7 +4,7 @@
 
 - **Repository:** `SamuelJWebber/cmbs-office-distress`
 - **Status:** Upgraded from v0.1 snapshot prototype to **v0.2 longitudinal multi-filing CMBS distress tracker** using pure Python 3.12 stdlib + `pytest` offline test suite and deterministic self-contained dashboard at `docs/index.html`.
-- **Evidence level:** All parser, snapshot analytics, longitudinal migration/velocity/cohort math, rendering, CLI, and SEC User-Agent validation behaviors are **fixture-proven** against two dated synthetic ABS-EE XML fixtures (`tests/fixtures/synthetic_cmbs_absee.xml` dated `2026-10-15` and `tests/fixtures/synthetic_cmbs_absee_2026_10.xml` dated `2026-11-15`). Live SEC EDGAR EX-102 schema tags and HTTP ingestion remain **unverified** until `CMBS_CONTACT` is configured in GitHub Actions.
+- **Evidence level:** All parser, snapshot analytics, longitudinal migration/velocity/cohort math, rendering, CLI, and SEC User-Agent validation behaviors are **fixture-proven** against two dated synthetic ABS-EE XML fixtures (`tests/fixtures/synthetic_cmbs_absee.xml` dated `2026-10-15` and `tests/fixtures/synthetic_cmbs_absee_2026_10.xml` dated `2026-11-15`). Live SEC EDGAR EX-102 schema tags and HTTP ingestion remain **unverified**. CI checks contact syntax; manual retrieval and inspection of dated real filings are still required.
 
 ## What Changed in v0.2
 
